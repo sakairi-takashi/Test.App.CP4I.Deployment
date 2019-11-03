@@ -1,0 +1,36 @@
+apiVersion: v1
+clusters:
+- cluster:
+    insecure-skip-tls-verify: true
+    server: https://prod-master.fyre.ibm.com:8443
+  name: mycluster
+- cluster:
+    insecure-skip-tls-verify: true
+    server: https://prod-master.fyre.ibm.com:8443
+  name: prod-master-fyre-ibm-com:8443
+contexts:
+- context:
+    cluster: prod-master-fyre-ibm-com:8443
+    namespace: ace
+    user: admin/prod-master-fyre-ibm-com:8443
+  name: ace/prod-master-fyre-ibm-com:8443/admin
+- context:
+    cluster: prod-master-fyre-ibm-com:8443
+    namespace: default
+    user: admin/prod-master-fyre-ibm-com:8443
+  name: default/prod-master-fyre-ibm-com:8443/admin
+- context:
+    cluster: mycluster
+    namespace: default
+    user: admin
+  name: mycluster-context
+current-context: mycluster-context
+kind: Config
+preferences: {}
+users:
+- name: admin
+  user:
+    token: dK2El4P12CIbZ9CBu3pEOcR5scwPAQmFBFXvDrwhqidm
+- name: admin/prod-master-fyre-ibm-com:8443
+  user:
+    token: bcmlioeVkJatnoNrQN6qjIVRJn0u5NYzS_AOil7IKqE
