@@ -30,7 +30,6 @@ cloudctl login -a ${ICP_CONSOLE_URL} -n ${Namespace} -u admin -p ${REGISTRY_PASS
 cd /opt/certs
 helm init --client-only
 helm repo add local-charts --ca-file ${HELM_CERT_FILE_NAME} ${ICP_CONSOLE_URL}:443/helm-repo/charts
-#helm repo add local-charts https://ibm-test-chart.s3.amazonaws.com
 if test ${DeploymentType} = \'install\'; then
 helm ${DeploymentType} --name $ReleaseName local-charts/ibm-ace-server-icp4i-prod --namespace ${Namespace} --set imageType=ace --set image.aceonly=image-registry.openshift-image-registry.svc:5000/ace/${imagename}:${tag} --set image.acemqclient=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-mqclient-server-prod:11.0.0.6.1 --set image.acemq=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-mq-server-prod:11.0.0.6.1 --set image.configurator=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-icp-configurator-prod:11.0.0.6.1 --set image.designerflows=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-designer-flows-prod:11.0.0.6.1 --set image.pullSecret=${IMAGE_PULL_SECRET} --set persistence.enabled=false --set persistence.useDynamicProvisioning=false --set integrationServer.name=testace --set aceonly.replicaCount=1 --set license=accept --tls
 oc project ace
