@@ -43,5 +43,6 @@ rm -rf ${ACE_APP1}
 rm -rf ${ACE_APP2}''' 
 	}
 }
+cleanWs()
 }
 }
