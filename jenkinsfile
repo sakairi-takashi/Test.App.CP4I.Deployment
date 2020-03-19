@@ -22,7 +22,7 @@ cp ${ACE_APP2}_DEV_${ACE_APP2_VERSION}.bar /var/lib/jenkins/jobs/${JOB_NAME}/wor
 cd ${WORKSPACE}
 oc login ${OCP_API_URL} -u admin -p ${REGISTRY_PASSWORD} --insecure-skip-tls-verify
 docker login ${OpenshiftRegistryURL} -u $(oc whoami) -p $(oc whoami -t)
-docker build -t ${imagename}:${BUILD_NUMBER} --build-arg KEYSTORE_PWD=${KeyStore_Pwd} .
+docker build -t ${imagename}:${BUILD_NUMBER} .
 docker tag ${imagename}:${BUILD_NUMBER} ${targetrepo}/${imagename}:${tag}-amd64
 docker push ${targetrepo}/${imagename}:${tag}-amd64
 source /etc/profile
@@ -33,7 +33,7 @@ helm repo add local-charts --ca-file ${HELM_CERT_FILE_NAME} ${ICP_CONSOLE_URL}:4
 if test ${DeploymentType} = \'install\'; then
 helm ${DeploymentType} --name $ReleaseName local-charts/ibm-ace-server-icp4i-prod --namespace ${Namespace} --set imageType=ace --set image.aceonly=image-registry.openshift-image-registry.svc:5000/ace/${imagename}:${tag} --set image.acemqclient=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-mqclient-server-prod:11.0.0.6.1 --set image.acemq=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-mq-server-prod:11.0.0.6.1 --set image.configurator=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-icp-configurator-prod:11.0.0.6.1 --set image.designerflows=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-designer-flows-prod:11.0.0.6.1 --set image.pullSecret=${IMAGE_PULL_SECRET} --set persistence.enabled=false --set persistence.useDynamicProvisioning=false --set integrationServer.name=testace --set aceonly.replicaCount=1 --set license=accept --tls
 oc project ace
-oc expose svc ${ReleaseName}-ibm-ace-server-icp4i-prod --port=7843
+oc expose svc ${ReleaseName}-ibm-ace-server-icp4i-prod --port=7800
 oc autoscale deployment/${ReleaseName}-ibm-ace-server-icp4i-prod --min 1 --max 3 --cpu-percent=25
 else
 helm ${DeploymentType} $ReleaseName local-charts/ibm-ace-server-icp4i-prod --namespace ${Namespace} --set imageType=ace --set image.aceonly=image-registry.openshift-image-registry.svc:5000/ace/${imagename}:${tag} --set image.acemqclient=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-mqclient-server-prod:11.0.0.6.1 --set image.acemq=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-mq-server-prod:11.0.0.6.1 --set image.configurator=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-icp-configurator-prod:11.0.0.6.1 --set image.designerflows=image-registry.openshift-image-registry.svc:5000/ace/ibm-ace-designer-flows-prod:11.0.0.6.1 --set image.pullSecret=${IMAGE_PULL_SECRET} --set persistence.enabled=false --set persistence.useDynamicProvisioning=false --set integrationServer.name=testace --set aceonly.replicaCount=1 --set license=accept --tls
